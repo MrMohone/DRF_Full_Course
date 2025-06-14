@@ -4,4 +4,8 @@ from . import views
 urlpatterns = [
     path('students/', views.studentsView),
     path('students/<int:pk>/', views.studentsDetailView),
+    
+    #class based
+    path('employees/', views.Employees.as_view()),
+    path("employees/<int:pk>/", views.EmployeesDetail.as_view())
 ]

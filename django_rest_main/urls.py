@@ -24,5 +24,6 @@ urlpatterns = [
     
     #Api application urls
     path('api/v1/', include('api.urls')),
+    
 ]
 
