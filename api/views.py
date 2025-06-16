@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from employees.models import Employee
 from django.http import Http404
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, viewsets
 
 #Function based view
 @api_view(["GET", "POST"])# user can see only the data in the student table
@@ -118,6 +118,7 @@ class EmployeesDetail(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins
         return self.destroy(request, pk)
 """
 
+"""
 #Generics 
 class Employees(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
@@ -128,3 +129,18 @@ class EmployeesDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     lookup_field = "pk"
+"""
+
+#ViewSets
+class EmployeeViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Employee.objects.all()
+        serializer = EmployeeSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = EmployeeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors)
