@@ -11,7 +11,7 @@ from employees.models import Employee
 from django.http import Http404
 from rest_framework import mixins, generics
 
-#FUNCTION BASED SERIALIZABLE👇
+#Function based view
 @api_view(["GET", "POST"])# user can see only the data in the student table
 def studentsView(request):
     if request.method == "GET":
@@ -28,6 +28,7 @@ def studentsView(request):
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+#Function based view 
 @api_view(["GET", "PUT", "DELETE"])# user can see, update and delete the data in the student table
 def studentsDetailView(request, pk):
     try:
@@ -53,7 +54,7 @@ def studentsDetailView(request, pk):
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-# #CLASS BASED SERIALZABLE
+# #Class based View
 # class Employees(APIView):
 #     def get(self, request):
 #         employees = Employee.objects.all()
@@ -90,7 +91,8 @@ def studentsDetailView(request, pk):
 #         employee.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+"""
+#Mixis
 class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -100,7 +102,8 @@ class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
     
     def post(self, request):
         return self.create(request)
-    
+
+#Mixis
 class EmployeesDetail(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -113,5 +116,15 @@ class EmployeesDetail(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins
     
     def delete(self, request, pk):
         return self.destroy(request, pk)
+"""
 
+#Generics 
+class Employees(generics.ListCreateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    
 
+class EmployeesDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    lookup_field = "pk"
