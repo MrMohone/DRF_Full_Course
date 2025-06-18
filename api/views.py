@@ -11,7 +11,7 @@ from employees.models import Employee
 from django.http import Http404
 from rest_framework import mixins, generics, viewsets
 
-#Function based view
+#Function based view:-------------------------------------
 @api_view(["GET", "POST"])# user can see only the data in the student table
 def studentsView(request):
     if request.method == "GET":
@@ -28,7 +28,7 @@ def studentsView(request):
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-#Function based view 
+#Function based view:--------------------------
 @api_view(["GET", "PUT", "DELETE"])# user can see, update and delete the data in the student table
 def studentsDetailView(request, pk):
     try:
@@ -54,7 +54,8 @@ def studentsDetailView(request, pk):
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-# #Class based View
+""" 
+#Class based View:--------------------------------
 # class Employees(APIView):
 #     def get(self, request):
 #         employees = Employee.objects.all()
@@ -66,7 +67,8 @@ def studentsDetailView(request, pk):
 #             serializer.save()
 #             return Response(serializer.data, status=status.HTTP_201_CREATED)
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+#Class based View:--------------------------------
 # class EmployeesDetail(APIView):
 #     def get_object(self, pk):
 #         try:
@@ -90,9 +92,10 @@ def studentsDetailView(request, pk):
 #         employee = self.get_object(pk)
 #         employee.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
+""" 
 
 """
-#Mixis
+#Mixis:-------------------------------------------
 class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -103,7 +106,7 @@ class Employees(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
     def post(self, request):
         return self.create(request)
 
-#Mixis
+#Mixis:----------------------------------------
 class EmployeesDetail(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -131,7 +134,10 @@ class EmployeesDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "pk"
 """
 
-#ViewSets 👉1,viewsets.ViewSet 
+
+"""
+#ViewSets:-------------------- 
+# 👉1,viewsets.ViewSet 
 # class EmployeeViewSet(viewsets.ViewSet):
 #     def list(self, request):
 #         queryset = Employee.objects.all()
@@ -154,8 +160,10 @@ class EmployeesDetail(generics.RetrieveUpdateDestroyAPIView):
 #         employee = get_object_or_404(Employee, pk=pk)
 #         employee.delete()
         # return Response(status=status.HTTP_204_NO_CONTENT)
+        """
     
-# ViewSets 👉2,viewsets.ModelViewSet
+# ViewSets:-------------------------
+# 👉2,viewsets.ModelViewSet
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
