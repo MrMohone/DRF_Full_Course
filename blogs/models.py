@@ -9,6 +9,7 @@ class Blog(models.Model):
         return self.blog_title
     
 class Comment(models.Model):
+    #Here blog value will be returnded value from 'Blog' or 'blog_title' 
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField()
     
