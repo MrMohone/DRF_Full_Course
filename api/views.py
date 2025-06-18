@@ -10,6 +10,8 @@ from rest_framework.views import APIView
 from employees.models import Employee
 from django.http import Http404
 from rest_framework import mixins, generics, viewsets
+from blogs.models import Blog, Comment
+from blogs.serializers import BlogSerializers, CommentSerializers
 
 #Function based view:-------------------------------------
 @api_view(["GET", "POST"])# user can see only the data in the student table
@@ -167,3 +169,25 @@ class EmployeesDetail(generics.RetrieveUpdateDestroyAPIView):
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+
+#Nested Serializers
+class BlogsViews(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializers
+    
+    
+class CommentsViews(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializers
+    
+    
+class BlogsDetailViews(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializers
+    lookup_field = "pk"
+    
+    
+class CommentsDetailViews(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializers
+    lookup_field = "pk"
