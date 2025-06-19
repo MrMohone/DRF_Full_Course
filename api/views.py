@@ -13,6 +13,8 @@ from rest_framework import mixins, generics, viewsets
 from blogs.models import Blog, Comment
 from blogs.serializers import BlogSerializers, CommentSerializers
 from .paginations import CustomPagination
+from employees.filters import EmployeeFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 #Function based view:-------------------------------------
 @api_view(["GET", "POST"])# user can see only the data in the student table
@@ -165,17 +167,23 @@ class EmployeesDetail(generics.RetrieveUpdateDestroyAPIView):
         # return Response(status=status.HTTP_204_NO_CONTENT)
         """
     
-# ViewSets:-------------------------
+# ViewSets:-------------------------AND Custom Pagination and Filters
 # 👉2,viewsets.ModelViewSet
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     pagination_class = CustomPagination
+    # filterset_fields = ['designation'] #global filter
+    filterset_class = EmployeeFilter
 
 #Nested Serializers
 class BlogsViews(generics.ListCreateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializers
+    #Search Filter
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['blog_title','blog_body']
+    ordering_fields = ['id']
     
     
 class CommentsViews(generics.ListCreateAPIView):
